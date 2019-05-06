@@ -10,6 +10,10 @@ namespace vodTimeControl.Controllers
     public class TimeRegController : Controller
     {
         // GET: TimeReg
+        /// <summary>
+        /// Index view
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             CDateParameters ct = new CDateParameters();
