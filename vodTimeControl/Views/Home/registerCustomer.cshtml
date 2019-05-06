@@ -1,0 +1,135 @@
+﻿@model vodTimeControl.Models.CCustomer
+@{
+    ViewBag.Title = "registerCustomer";
+}
+
+<div class="row">
+    <div class="col-md-10">
+        <!--
+        <div class="well">
+            <div class="col-md-3">
+                <input type="text" id="EName" class="form-control" />
+            </div>
+            <div class="col-md-3">
+                <a href="#" class="btn btn-primary" onclick="FilterRecord()">Filter</a>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+            -->
+        <div>
+            <br />
+            <table class="table table-striped" id="myDataTable">
+                <thead>
+                    <tr>
+                        <th>Kundnamn</th>
+                        <th>Kundtyp</th>
+                        <th>Address</th>
+                        <th>Ort</th>
+                        <th>Email</th>
+                        <th>Aktiv</th>
+                        <th>ID</th>
+                        <!--<th>Faktureras</th>-->
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>        
+        <br />
+        <div class="well">
+            <a href="#" class="btn btn-success" onclick="AddEditCust(0)">&nbsp;Ny&nbsp;</a>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="myModal1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    <h3 class="modal-title">Ändra/skapa kund</h3>
+                </div>
+                <div class="modal-body" id="myModalBodyDiv1">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var oTable;
+    $(document).ready(function () {
+        BindDataTable();
+    });
+
+
+    var BindDataTable = function (response) {
+
+        if ($.fn.DataTable.isDataTable("#myDataTable")) {
+
+            oTable.draw();
+        }
+        else {
+
+            oTable = $("#myDataTable").DataTable({
+                "bServerSide": true,
+                "sAjaxSource": "/Home/getAllCustomers",
+                "fnServerData": function (sSource, aoData, fnCallback) {
+
+                    //  var EName = $("#EName").val();
+                    //  aoData.push({ "name": "EName", "value": EName });
+
+                    $.ajax({
+                        data: aoData,
+                        type: "Get",
+                        url: sSource,
+                        success: fnCallback
+                    })
+
+
+                },
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Swedish.json"
+                },
+                "aoColumns": [
+                    { "mData": "custName" },
+                    { "mData": "custTypeName" },
+                    { "mData": "address1" },
+                    { "mData": "city" },
+                    { "mData": "email" },
+                    {
+                        "mData": "active",
+                        "bSortable": false,
+                        "render": function (active, type, full, meta) {
+                            var s = '<input type="checkbox" '
+                            if (active)
+                                s = s + " checked ";
+                            s = s + ' disabled />';
+                            return s;
+                        }
+                    },
+                    {
+                        "mData": "customerID",
+                        "render": function (customerID, type, full, meta) {
+                            return '<a href="#" onclick="AddEditCust(' + customerID + ')"><i class="glyphicon glyphicon-pencil"></i></a>'
+
+                        }
+                    },
+                ]
+
+            });
+        }
+    }
+
+
+    var AddEditCust = function (CustomerID) {
+        var url = "/Home/AddEditCust?CustomerID=" + CustomerID;
+
+        $("#myModalBodyDiv1").load(url, function () {
+            $("#myModal1").modal("show");
+
+        })
+
+    }
+
+</script>

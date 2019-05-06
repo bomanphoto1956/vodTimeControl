@@ -1,0 +1,60 @@
+﻿@model vodTimeControl.Models.CTimeTrack
+@{
+    ViewBag.Title = "Index";
+}
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+<div class="well">
+    <h3>Välj</h3>
+    @Html.TextBox("Test", "", new { @class = "date-picker" })
+    @Html.TextBox("Test2", string.Format("{0:d}", @System.DateTime.Today), new { @class = "date-picker" })
+    @Html.TextBox("Test3", "{yyyy-MM-dd}", new { @class = "date-picker" })
+    @Html.TextBox("Test4", "{yyyy-MM-dd}", new { @class = "date" })
+    @Html.Editor("startdate42", new { id = "startdate" })
+
+
+
+</div>
+<div class="well">
+    <a href="#" class="btn btn-success" onclick="CreatePdf()">&nbsp;Pdf&nbsp;</a>
+
+</div>
+<div class="well">
+    <a href="Pdf4?id=12345" target="_blank" class="btn btn-info">&nbsp;Pdf2&nbsp;
+    </a>
+</div>
+<div id="showFile">
+
+</div>
+@*<iframe src="@Url.Action("pdf4", "Test" )"></iframe>*@
+
+<script>
+
+
+    $(document).ready(function () {
+        alert("Document ready");
+        $('.date').datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+
+        $("#startdate").datepicker();
+
+    });
+
+
+    var CreatePdf = function () {
+        alert("createPdf");
+        var data = "";
+        $.post('/Test/pdf4', data, function (response) {
+            alert(response);
+            window.open(response, "_blank");
+        });
+    }
+
+
+
+
+</script>
+
+
+

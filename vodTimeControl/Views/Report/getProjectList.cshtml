@@ -1,0 +1,9 @@
+﻿<option value="">--Alla projekt--</option>
+@if (ViewBag.projlist != null)
+{
+    foreach (var item in ViewBag.projlist)
+    {
+        <option value="@item.Value">@item.Text </option>
+    }
+
+}

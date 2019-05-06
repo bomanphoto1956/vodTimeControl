@@ -1,0 +1,78 @@
+﻿@model vodTimeControl.Models.CProject
+<style>
+    .Error {
+        color: red;        
+    }
+</style>
+
+<div>
+    <form id="myForm">
+        @Html.HiddenFor(m => m.projectID)
+        @Html.HiddenFor(m => m.customerID)
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.TextBoxFor(m => m.projectName, new { @class = "form-control ", @placeholder = "Projektnamn", style = "margin-bottom: 5px;" })
+                @Html.ValidationMessageFor(m => m.projectName, "", new { @class = "Error" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                @*@Html.Label("Aktivt", new { style = "margin-bottom: 5px;" })*@
+                <span><span style="vertical-align : middle;">Aktivt&nbsp;&nbsp;</span>@Html.CheckBoxFor(m => m.active, new { @checked = "checked", style = "vertical-align : middle;" })</span>
+                
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12" id="ErrorTextId" style="color:red; margin-bottom:5px">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                <a href="#" id="btnSubmit" class="btn btn-success" style="margin-bottom: 5px;">
+                    @if (Model.customerID > 0)
+                    {<span>Uppdatera</span> }
+                    else
+                    {<span>Spara</span>}
+                </a>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </form>
+</div>
+
+
+
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $("#btnSubmit").click(function () {
+            if (!$("#myForm").valid())
+                return;
+            var myformdata = $("#myForm").serialize();            
+
+            $.ajax({
+
+                type: "POST",
+                url: "/Home/updateProject",
+                data: myformdata,
+                success: function (response) {
+                    if (response == "") {
+                        $("#myModal1").modal("hide");
+                        BindDataTable();
+                    }
+                    else
+                        $("#ErrorTextId").html("<span>" + response + "</span>");
+                }
+
+            })
+        })
+
+    })
+
+
+</script>
+

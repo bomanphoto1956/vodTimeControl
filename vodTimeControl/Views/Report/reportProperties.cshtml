@@ -1,0 +1,216 @@
+﻿@{
+    ViewBag.Title = "reportProperties";
+}
+
+<style>
+    label.checkbox-label input[type=checkbox] {
+        position: relative;
+        vertical-align: middle;
+        bottom: 2px;
+        padding-top: 40px;
+    }
+</style>
+
+
+
+<div class="row">
+    <div class="well">
+        <div class="col-md-3">
+            <h5>Rapportperiod</h5>
+            <div class="input-group">
+                @Html.DropDownList("periodList", ViewBag.periodList as SelectList, "--Välj period--", new { @class = "form-control" })
+                <div style="padding-top:40px;"><label class="checkbox-label" style="font-weight:100;">Datumnivå @Html.CheckBox("chkDate", true) &nbsp;&nbsp;&nbsp;Aktivitet @Html.CheckBox("chkActivity", true)</label></div>
+            </div>
+
+        </div>
+        <div class="col-md-3" style="margin-left:0px;">
+            <h5>Välj</h5>
+            <div class="input-group">
+                @Html.DropDownList("customerIdList", new SelectList(""), "--Välj kund--", new { @class = "form-control", style = "width:400px;" })
+                @Html.DropDownList("projectIdList", new SelectList(""), "--Alla projekt--", new { @class = "form-control", style = "width:400px; margin-top : 5px;" })
+            </div>
+
+        </div>
+        <div class="col-md-3" style="margin-left:0px;">
+            <h5>Användare</h5>
+            <div class="input-group">
+                @Html.DropDownList("userIdList", new SelectList(""), "--Alla användare--", new { @class = "form-control", style = "width:400px;" })
+            </div>
+        </div>
+        <div class="col-md-1" style="margin-right:20px;">
+            <h5>&nbsp;</h5>
+            <div class="input-group" >
+                <a href="#" class="btn btn-success" onclick="ShowReport()">Visa rapport</a>
+            </div>
+        </div>        
+        <div class="col-md-1">            
+            <div class="input-group" >
+                <a href="#" class="btn" onclick="CreatePdf()" style="margin-top:21px;">                    
+                    <img src="~/Content/Images/Adobe_Document_Cloud_logo_SCREEN_RGB_48px.png" />
+                </a>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-12" id="ErrorTextId" style="color:red; margin-bottom:5px">
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+    <div id="showHours"></div>
+    
+</div>
+
+<script src="~/Scripts/jspdf.js"></script>
+
+
+<script>
+    var reportPeriodId;
+    var customerId;
+    var projectId;
+
+    var getVariables = function () {
+        reportPeriodId = "0";
+        customerId = "0";
+        projectId = "0";
+        reportPeriodId = $("#periodList").val() == "" ? "0" : $("#periodList").val();
+        if (reportPeriodId == "0")
+            return;
+        customerId = $("#customerIdList").val() == "" ? "0" : $("#customerIdList").val();
+        if (customerId == "0")
+            return;
+        projectId = $("#projectIdList").val() == "" ? "0" : $("#projectIdList").val();
+    }
+
+
+    $(document).ready(function () {
+        $("#periodList").change(function () {
+            getVariables();
+            getCustList();
+            getProjectList();
+            getUserList();
+        });
+        $("#customerIdList").change(function () {  
+            $("#projectIdList").val(""); 
+            getVariables();
+            getProjectList();
+            getUserList();
+        });
+        $("#projectIdList").change(function () {            
+            getVariables();
+            getUserList();
+        });
+
+
+    });
+
+    var getCustList = function () {
+        var data = "reportPeriodId=" + reportPeriodId;        
+        $.post('/Report/getCustList', data, function (response) {
+            $("#customerIdList").empty();
+            $("#customerIdList").append(response);
+        }, 'html');
+    }
+
+    var getProjectList = function () {
+        var data = "reportPeriodId=" + reportPeriodId + "&customerId=" + customerId;        
+        $.post('/Report/getProjectList', data, function (response) {
+            $("#projectIdList").empty();
+            $("#projectIdList").append(response);
+        }, 'html');
+    }
+
+    var getUserList = function () {
+        var data = "reportPeriodId=" + reportPeriodId + "&customerId=" + customerId + "&projectId=" + projectId;                
+        $.post('/Report/getUserList', data, function (response) {
+            $("#userIdList").empty();
+            $("#userIdList").append(response);
+        }, 'html');        
+    }
+
+    var ShowReport = function () {
+        $("#ErrorTextId").html("");
+        var periodId = $("#periodList").val();
+        if (periodId == "") {
+            $("#ErrorTextId").html("<span>Välj period</span>");
+            return;
+        }
+        var customerId = $("#customerIdList").val();
+        if (customerId == "") {
+            $("#ErrorTextId").html("<span>Välj kund</span>");
+            return;
+        }
+        var projectId = $("#projectIdList").val();
+        if (projectId == "")
+            projectId = "0";
+        var datePeriod = "0";
+        if ($('#chkDate').is(':checked'))
+            datePeriod = "1";
+        var showActivity = "0";
+        if ($('#chkActivity').is(':checked'))
+            showActivity = "1";
+        var userId = $("#userIdList").val();
+        if (userId == "")
+            userId = "0";
+        var data = "periodId=" + periodId + "&customerId=" + customerId + "&projectId=" + projectId + "&datePeriod=" + datePeriod + "&showActivity=" + showActivity + "&userId=" + userId;
+        $.post('/Report/getReportPeriodHours', data, function (response) {
+            $("#showHours").empty();
+            $("#showHours").append(response);
+            connectDataTable();
+        }, 'html');
+
+    }
+
+    var connectDataTable = function () {
+
+        $('#myDataTable').DataTable(
+            {
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Swedish.json"
+                }
+
+            });
+    }
+
+    var CreatePdf = function () { 
+        $("#ErrorTextId").html("<span></span>");
+        var periodId = $("#periodList").val();
+        if (periodId == "") {
+            $("#ErrorTextId").html("<span>Välj period</span>");
+            return;
+        }
+        var customerId = $("#customerIdList").val();
+        if (customerId == "") {
+            $("#ErrorTextId").html("<span>Välj kund</span>");
+            return;
+        }
+        var projectId = $("#projectIdList").val();
+        if (projectId == "")
+            projectId = "0";
+        var datePeriod = "0";
+        if ($('#chkDate').is(':checked'))
+            datePeriod = "1";
+        var showActivity = "0";
+        if ($('#chkActivity').is(':checked'))
+            showActivity = "1";
+        var userId = $("#userIdList").val();
+        if (userId == "")
+            userId = "0";
+        var data = "periodId=" + periodId + "&customerId=" + customerId + "&projectId=" + projectId + "&datePeriod=" + datePeriod + "&showActivity=" + showActivity + "&userId=" + userId;
+        $.post('/Report/getReportPeridHoursPDF', data, function (response) {    
+            if (response.errStr != "")
+                $("#ErrorTextId").html("<span>" + response.errStr + "</span>");
+            else {
+                //alert(response.relativePath);
+                window.open(response.relativePath, "_blank");
+            }
+        });
+    }
+
+
+</script>
+
+
+
+

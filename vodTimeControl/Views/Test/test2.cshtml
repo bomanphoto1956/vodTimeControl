@@ -1,0 +1,63 @@
+﻿@model IEnumerable<vodTimeControl.Models.userTbl>
+
+@{
+    ViewBag.Title = "test2";
+}
+
+<h2>test2</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.userName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.regDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.updateDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.password)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.userRole.userRoleName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.userName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.regDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.updateDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.password)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.userRole.userRoleName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.userId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.userId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.userId })
+        </td>
+    </tr>
+}
+
+</table>

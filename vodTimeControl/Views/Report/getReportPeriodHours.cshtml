@@ -1,0 +1,48 @@
+﻿@model IEnumerable<vodTimeControl.Models.CReportPeriodHours>
+
+<div class="well">
+    <div class="col-md-8 ">
+        <span style="font-weight:bold;">Totalt antal timmar : </span><span style="font-weight:normal">@ViewBag.sumHours</span>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<table class="table table-striped" id="myDataTable">
+    <thead>
+        <tr>
+            <th>Projekt</th>
+            @if (ViewBag.showActivity == 1)
+            {
+                <th>Aktivitet</th>
+            }
+            @if (ViewBag.datePeriod == 1)
+            {
+                <th>Datum</th>
+            }
+            <th>Timmar</th>
+            <th>Notering</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+            {
+            <tr>
+                <td>@item.projectName</td>
+                @if (ViewBag.showActivity == 1)
+                {
+                    <td>@item.subProjectName</td>
+                }
+                @if (ViewBag.datePeriod == 1)
+                {
+                    <td>@item.tDate</td>
+                }
+                <td>@item.hours</td>
+                @if (ViewBag.datePeriod == 1)
+                {
+                    <td>@item.note</td>
+                }
+            </tr>
+
+        }
+
+    </tbody>
+</table>

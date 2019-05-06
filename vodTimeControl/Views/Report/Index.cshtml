@@ -1,0 +1,68 @@
+﻿@model vodTimeControl.Models.CDateParameters
+@{
+    ViewBag.Title = "Index";
+}
+
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+
+<div class="row">
+    <div class="well">
+        <div class="col-md-4">
+            <h4>Skapa rapportperiod</h4>
+            <div class="input-group">
+                @Html.TextBox("dFrom", (string)ViewBag.dFromStr, new { disabled = "disabled" })
+                @*@Html.EditorFor(Model => Model.dFrom, "{0:yyyy-MM-dd}", new { @class = "date", @disabled = "disabled" })*@
+                <span class="input-group-addon">-</span>
+                @Html.EditorFor(Model => Model.dTo, "{0:yyyy-MM-dd}", new { @class = "date" })
+            </div>
+        </div>
+        <div class="col-md-offset-8">
+            <a href="#" class="btn btn-info" style="margin-top:20px;" onclick="CreateReportPeriod()">Generera</a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="well">
+        <div id="showSpinner" style="display:none">
+            <img src="~/Content/Images/5.gif" style="height: 20px;
+            width: auto;" />
+        </div>
+        <div id="updateResultId"></div>
+        <span id="ErrorTextId" style="color:red; margin-bottom:5px; margin-left:10px">
+        </span>
+
+    </div>
+</div>
+
+<script>
+    /*
+    $(document).ready(function () {
+        if (Modernizr.inputtypes.date) {
+            $(".date").datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+        }
+    });
+
+    */
+
+    var CreateReportPeriod = function () {
+        var dFrom = $("#dFrom").val();
+        var dTo = $("#dTo").val();
+        var data = "dFrom=" + dFrom + "&dTo=" + dTo;
+        $("#showSpinner").show();
+        $.post('/Report/createReportPeriod', data, function (response) {
+            if (response.errMess != "")
+                $("#ErrorTextId").html("<span>" + response.errMess + "</span>");
+            else
+                $("#updateResultId").html("<span>Antal uppdaterade tidregisteringar : " + response.cnt + "</span>");
+
+            $("#showSpinner").hide();
+        });
+
+    }
+
+
+
+</script>
+

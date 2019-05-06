@@ -1,0 +1,110 @@
+﻿@model vodTimeControl.Models.CTimeTrack
+<style>
+    .Error {
+        color: red;
+    }
+
+    .Label {
+        margin-top: 8px;
+        font-weight: normal;
+    }
+
+    .showValue {
+        color: dimgray;
+    }
+</style>
+
+<div>
+    <form id="myForm">
+        @Html.HiddenFor(m => m.timeTrackRowID)
+        @Html.HiddenFor(m => m.timeTrackHeadID)
+        @Html.HiddenFor(m => m.customerID)
+
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.LabelFor(m => m.customerID, new { @class = "Label" })
+                <span class="showValue">@Html.DisplayTextFor(m => m.customerName)</span>
+                &nbsp;&nbsp;&nbsp;
+                @Html.LabelFor(m => m.projectId, new { @class = "Label" })
+                <span class="showValue">@Html.DisplayTextFor(m => m.projectName)</span>                
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.LabelFor(m => m.subProjectID, new { @class = "Label" })
+                @Html.DropDownListFor(m => m.subProjectID, ViewBag.subProjList as SelectList, "--Välj aktivitet--", new { @class = "form-control", style = "margin-bottom: 5px;" })
+                @Html.ValidationMessageFor(m => m.subProjectID, "", new { @class = "Error" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.LabelFor(m => m.tDate, new { @class = "Label" })
+                <br />
+                @Html.EditorFor(m => m.tDate, "{0:yyyy-MM-dd}", new { @class = "date", style = "margin-bottom: 5px;" })
+                @Html.ValidationMessageFor(m => m.tDate, "", new { @class = "Error" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.LabelFor(m => m.hours, new { @class = "Label" })
+                <br />
+                @Html.TextBoxFor(m => m.hours, new { @class = "form-control ", @placeholder = "Timmar", style = "margin-bottom: 5px; width:20%;" })
+                @*@Html.EditorFor(m => m.hours, new { @class = "form-control ", @placeholder = "Timmar", style = "margin-bottom: 5px;" })*@
+                @Html.ValidationMessageFor(m => m.hours, "", new { @class = "Error" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                @Html.LabelFor(m => m.note, new { @class = "Label" })
+                <br />
+                @Html.TextAreaFor(m => m.note, 10, 40, new { @placeholder = "Beskrivning", style = "margin-bottom: 5px; width:100%; maxwidth: 100%; " })
+                @Html.ValidationMessageFor(m => m.note, "", new { @class = "Error" })
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-12" id="ErrorTextId2" style="color:red; margin-bottom:5px">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                <a href="#" id="btnSubmit" class="btn btn-success" style="margin-bottom: 5px;">
+                    <span>Spara</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#btnSubmit").click(function () {
+            if (!$("#myForm").valid())
+                return;
+            var myformdata = $("#myForm").serialize();
+
+            $.ajax({
+
+                type: "POST",
+                url: "/TimeReg/updateTimeTrack",
+                data: myformdata,
+                success: function (response) {
+                    if (response == "") {                        
+                        $("#myModal1").modal("hide");
+                        BindDataTable();
+                    }
+                    else
+                        $("#ErrorTextId2").html("<span>" + response + "</span>");
+                }
+
+            })
+        })
+
+    })
+
+
+</script>
+

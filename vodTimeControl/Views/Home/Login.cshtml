@@ -1,0 +1,72 @@
+﻿@model vodTimeControl.Models.CUser
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="panel panel-body">
+
+    
+
+    <div class="col-md-9">
+
+        <form id="myForm">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <h4>Login</h4>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.TextBoxFor(m => m.userName, new { @class = "form-control", @placeholder = "Användarnamn", style = "margin-bottom: 5px;" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12">
+                    @Html.PasswordFor(m => m.password, new { @class = "form-control", @placeholder = "Lösenord", style = "margin-bottom: 5px;" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-12" id="ErrorTextId" style="color:red">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <a href="#" class="btn btn-success " onclick="LoginUser()">Login</a>
+                    <a href="/Home/Index" class="btn btn-info ">Avbryt</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+
+    var LoginUser = function () {        
+        var data = $("#myForm").serialize();
+
+        $.ajax({
+            type: "Post",
+            url: "/Home/LoginUser",
+            data: data,
+            success: function (response) {   
+                if (response == "Admin" || response == "User")
+                    window.location.href = "/Home/Index";
+                else {                    
+                    $("#ErrorTextId").html("<span>" + response + "</span>"); 
+                }
+            }
+
+
+
+        })
+
+
+
+    }
+
+</script>
+

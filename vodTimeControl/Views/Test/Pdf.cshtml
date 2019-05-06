@@ -1,0 +1,37 @@
+﻿@model vodTimeControl.Models.CUser
+@{
+    Layout = null;
+}
+<itext creationdate="@DateTime.Now.ToString()" producer="Kjbo">
+    <paragraph style="font-family:Arial, Helvetica, sans-serif; font-size:18px;font-style:italic">
+        <chunk style="font-weight:bold;">@ViewBag.Title</chunk>
+    </paragraph>
+    <table>
+        <row>
+            <cell>
+                <chunk style="font-weight:bold;">Username:</chunk>
+            </cell>
+            <cell>
+                <chunk>@Model.userName</chunk>
+            </cell>
+        </row>
+        <row>
+            <cell>
+                <chunk style="font-weight:bold;">UserRole:</chunk>
+            </cell>
+            <cell>
+                <chunk>@Model.userRoleName</chunk>
+            </cell>
+        </row>
+
+        <row>
+            <cell>
+                <chunk style="font-weight:bold;">Date:</chunk>
+            </cell>
+            <cell>
+                <chunk>@DateTime.Now</chunk>
+            </cell>            
+        </row>
+    </table>
+</itext>
+

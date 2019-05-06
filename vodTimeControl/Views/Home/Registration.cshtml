@@ -1,0 +1,114 @@
+﻿@model vodTimeControl.Models.CUser
+    @{
+        ViewBag.Title = "Registration";
+    }
+
+<style>
+    .Error {
+        color: red;
+    }
+</style>
+
+
+    <div class="panel panel-body">
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Instruktioner</h3>
+                    </div>
+                </div>                
+                <div class="caption">
+                    <h3>Användarregistrering</h3>
+                    <p>Kontakta administratören för denna applikation
+                    för att få tillgång till registreringsnyckel</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+
+            <form id="myForm">
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <h4>Registrera användare</h4>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12" >
+                        @Html.TextBoxFor(m => m.userName, new { @class = "form-control", @placeholder = "Användarnamn", style = "margin-bottom: 5px;" })
+                        @Html.ValidationMessageFor(m => m.userName, "", new { @class = "Error" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.DropDownListFor(m => m.userRoleId, ViewBag.UserRole as SelectList, "--Välj--", new { @class = "form-control", style = "margin-bottom: 5px;" })
+                        @Html.ValidationMessageFor(m => m.userRoleId, "", new { @class = "Error" })
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.TextBoxFor(m => m.email, new { @class = "form-control", @placeholder = "Email", style = "margin-bottom: 5px;" })
+                        @Html.ValidationMessageFor(m => m.email, "", new { @class = "Error" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        @Html.PasswordFor(m => m.password, new { @class = "form-control", @placeholder = "Lösenord", style = "margin-bottom: 5px;" })
+                        @Html.ValidationMessageFor(m => m.password, "", new { @class = "Error" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12" id="ErrorTextId" style="color:red">                        
+                    </div>
+                </div>
+
+                <div class="form-group">
+
+                    <div class="col-md-12">
+                        
+                                                      
+                            <a href="#" class="btn btn-success " onclick="RegisterUser()">Spara</a>
+                            <a href="/Home/Index" class="btn btn-info ">Avbryt</a>
+                        
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+<script>
+
+   
+    var RegisterUser = function () {  
+
+        if (!$("#myForm").valid())
+            return;        
+        var data = $("#myForm").serialize();
+
+        $.ajax({
+            type: "Post",
+            url: "/Home/RegisterUser",
+            data: data,
+            success: function (response) {
+                if (response == "Success")   
+                    window.location.href = "/Home/Index";                                                                 
+                else
+                    $("#ErrorTextId").html("<span>" + response + "</span>");                                               
+
+            }
+
+
+
+        })
+
+
+
+    }
+
+
+</script>
+
+

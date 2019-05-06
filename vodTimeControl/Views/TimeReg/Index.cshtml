@@ -1,0 +1,280 @@
+﻿@{
+    ViewBag.Title = "RegisterTime";
+}
+
+<link href="~/Content/themes/base/jquery-ui.min.css" rel="stylesheet" />
+<script src="~/Scripts/jquery-ui-1.12.1.min.js"></script>
+
+<div class="row">
+    <div class="well">
+        <div class="col-md-4">
+            <h4>Datumperiod</h4>
+            <div class="input-group">
+                @Html.Editor("dFrom", "{0:yyyy-MM-dd}", new { @class = "date" })
+                <span class="input-group-addon">-</span>
+                @Html.Editor("dTo", "{0:yyyy-MM-dd}", new { @class = "date" })
+            </div>
+        </div>
+        <div class="col-md-7" style="margin-left:30px;">
+            <h5>Välj</h5>
+            <div class="input-group">
+                @Html.DropDownList("customerIdList", ViewBag.myCustomers as SelectList, "--Välj kund--", new { @class = "form-control", style = "width:400px;" })
+                @Html.DropDownList("projectIdList", new SelectList(""), "--Välj projekt--", new { @class = "form-control", style = "width:400px;" })
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div>
+        <br />
+        <table class="table table-striped" id="myDataTable">
+            <thead>
+                <tr>
+                    <th>Kund</th>
+                    <th>Projekt</th>
+                    <th>Aktivitet</th>
+                    <th>Datum</th>
+                    <th>Timmar</th>
+                    <th>Notering</th>
+                    <th>Välj</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <br />
+    <div class="well">
+        <a href="#" class="btn btn-success" onclick="AddEditTimeTrack(0)">&nbsp;Nytt&nbsp;</a>
+        <span id="ErrorTextId" style="color:red; margin-bottom:5px; margin-left:10px">
+        </span>
+        
+            <!-- The next div has a background color and its own paddings and should be aligned right-->
+            <!-- It is now in the right column but aligned left in that column -->
+        <span style="text-align: right;" class="col-md-offset-6"><span id="showSumId">Antal timmar : 142</span></span>
+
+    </div>
+    <div class="modal fade" id="myModal1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    <h3 class="modal-title">Tidregistrering</h3>
+                </div>
+                <div class="modal-body" id="myModalBodyDiv1">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var oTable;
+    $(document).ready(function () {
+        if (Modernizr.inputtypes.date) {
+            $(".date").datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+        }
+        BindDataTable();
+        $("#dFrom").change(function () {
+            refreshTable();
+        });
+        $("#dTo").change(function () {
+            refreshTable();
+        });
+        $("#customerIdList").change(function () {
+            getProjectList();
+            refreshTable();
+        });
+        $("#projectIdList").change(function () {
+            refreshTable();
+        });
+
+
+
+    });
+
+
+    var BindDataTable = function (response) {
+
+        if ($.fn.DataTable.isDataTable("#myDataTable")) {
+            oTable.draw();
+        }
+        else {
+
+            oTable = $("#myDataTable").DataTable({
+                "bServerSide": true,
+                "sAjaxSource": "/TimeReg/getTimeReg",
+                "fnServerData": function (sSource, aoData, fnCallback) {
+
+                    var dFrom = $("#dFrom").val();
+                    var dTo = $("#dTo").val();
+                    var customerIdent = $("#customerIdList").val();
+                    var projectId = $("#projectIdList").val();
+                    if (customerIdent == "")
+                        customerIdent = 0;
+                    if (projectId == "")
+                        projectId = 0;
+                    if (customerIdent == 0)
+                        projectId = 0;
+
+
+                    aoData.push({ "name": "dFrom", "value": dFrom });
+                    aoData.push({ "name": "dTo", "value": dTo });
+                    aoData.push({ "name": "customerId", "value": customerIdent });
+                    aoData.push({ "name": "projectId", "value": projectId });
+
+                    $.ajax({
+                        data: aoData,
+                        type: "Get",
+                        url: sSource,
+                        success: fnCallback
+                    })
+
+
+                },
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Swedish.json"
+                },
+                "aoColumns": [
+                    { "mData": "customerName" },
+                    { "mData": "projectName" },
+                    { "mData": "subProjectName" },
+                    { "mData": "tDateStr" },
+                    { "mData": "hours" },
+                    { "mData": "shortNote" },
+                    {
+                        "mData": "timeTrackRowID",
+                        "bSortable": false,
+                        "mRender": function (timeTrackRowID, type, full, meta) {
+                            var reported = 0;
+                            reported = full.reportPeriodId;
+                            if (reported == 0)
+                                return '<a href="#" onclick="AddEditTimeTrack(' + timeTrackRowID + ')"><i class="glyphicon glyphicon-pencil"></i></a>' +
+                                    '&nbsp;&nbsp;<a href="#" onclick="DeleteTimeTrack(' + timeTrackRowID + ')"><i class="glyphicon glyphicon-trash"></i></a>';
+                            else
+                                return "";
+
+                        }
+                    },
+                ]
+
+            });
+        }
+        sumHours();
+    }
+
+    var getProjectList = function () {
+        var CustomerId = $("#customerIdList").val();
+        if (CustomerId == "")
+            CustomerId = 0;
+
+        $.ajax({
+            type: "Post",
+            url: "/Home/GetProjectList?CustomerId=" + CustomerId,
+            contentType: "html",
+            success: function (response) {
+                $("#projectIdList").empty();
+                $("#projectIdList").append(response);
+            }
+        })
+    }
+
+
+    var refreshTable = function () {
+        BindDataTable();
+    }
+
+    var AddEditTimeTrack = function (timeTrackRowID) {
+        var customerID = $("#customerIdList").val();
+        if (customerID == "")
+            customerID = 0;
+        var projectID = $("#projectIdList").val();
+        if (projectID == "")
+            projectID = 0;
+        if (customerID == 0)
+            projectID = 0;
+
+        var url = "/TimeReg/AddEditTimeTrack?timeTrackRowID=" + timeTrackRowID + "&customerID=" + customerID + "&projectID=" + projectID;
+        $("#myModalBodyDiv1").load(url, function () {
+            $("#myModal1").modal("show");
+
+        })
+
+
+    }
+
+    var DeleteTimeTrack = function (timeTrackRowID) {
+        $.ajax({
+            type: "Post",
+            url: "/TimeReg/deleteTimeTrack?timeTrackRowId=" + timeTrackRowID,
+            contentType: "json",
+            success: function (response) {
+                alert(JSON.stringify(response));
+                BindDataTable();
+            }
+        })
+    }
+
+    var sumHoursOld = function ()
+    {
+        var projectId = $('#projectIdList').val();
+        if (projectId == "")
+            projectId = 0;
+        var dFrom = $('#dFrom').val();
+        var dTo = $('#dTo').val();        
+        
+        $.ajax({
+            type: "Post",
+            url: "/TimeReg/sumHours?dFrom=" + dFrom + "&dTo=" + dTo + "&projectId=" + projectId,
+            contentType: "json",
+            success: function (response) {
+                alert(JSON.stringify(response));
+                if ($("#projectIdList").val() == "")
+                    $('#showSumId').text("Antal timmar i perioden" + response.sumInPeriod);
+                else
+                    $('#showSumId').text("Antal timmar före vald period : " + response.sumBefore + ". Antal timmar i perioden" + response.sumInPeriod);
+
+            }
+        });        
+    }
+
+
+    var sumHours = function () {
+        var projectId = $('#projectIdList').val();
+        if (projectId == "")
+            projectId = 0;
+        var customerId = $('#customerIdList').val();
+        if (customerId == "")
+            customerId = 0;
+        var dFrom = $('#dFrom').val();
+        var dTo = $('#dTo').val();   
+
+        var data = "customerId=" + customerId + "&projectId=" + projectId + "&dFrom=" + dFrom + "&dTo=" + dTo;        
+        var sumHours = 0;
+        $.post('/TimeReg/sumHours', data, function (response) {
+            if ($("#customerIdList").val() == "")
+                $('#showSumId').text("Summa timmar : " + response.sumInPeriod);
+            else {
+                sumHours = response.sumBefore + response.sumAfter + response.sumInPeriod;
+                $('#showSumId').text("Summa timmar (aktuell period) : " + response.sumInPeriod + " (antal timmar totalt) : " + sumHours);
+            }
+        });
+
+    }
+
+</script>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,163 @@
+﻿@model vodTimeControl.Models.CSubproject2
+@{
+    ViewBag.Title = "registerActivity";
+}
+
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="well" style="margin-top:5px;">
+            <div class="col-md-10">
+                <h3 style="margin-top:0px; color:darkseagreen">Aktiviteter</h3>
+            </div>
+            <div class="col-md-5">
+                @Html.DropDownList("customerIdList", ViewBag.Customer as SelectList, "--Välj kund--", new { @class = "form-control", style = "margin-bottom: 5px;" })
+            </div>
+            <div class="col-md-5">
+                @Html.DropDownList("projectIdList", new SelectList(""), "--Välj projekt--", new { @class = "form-control", style = "margin-bottom: 5px;" })
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div>
+            <br />
+            <table class="table table-striped" id="myDataTable">
+                <thead>
+                    <tr>
+                        <th>Aktivitet</th>
+                        <th>Ändra</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <br />
+        <div class="well">
+            <a href="#" class="btn btn-success" onclick="AddEditActivity(0)">&nbsp;Nytt&nbsp;</a>
+            <span id="ErrorTextId" style="color:red; margin-bottom:5px; margin-left:10px">
+            </span>
+        </div>
+
+    </div>
+
+    <div class="modal fade" id="myModal1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    <h3 class="modal-title">Ändra/skapa aktivitet</h3>
+                </div>
+                <div class="modal-body" id="myModalBodyDiv1">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var oTable;
+    $(document).ready(function () {
+        $("#customerIdList").change(function () {
+
+            var CustomerId = $(this).val();
+
+            if (CustomerId == "") {
+                CustomerId = "0";
+                $("#projectIdList").empty();
+                return;
+            }
+
+            $.ajax({
+
+                type: "Post",
+                url: "/Home/GetProjectList?CustomerId=" + CustomerId,
+                contentType: "html",
+                success: function (response) {
+                    $("#projectIdList").empty();
+                    $("#projectIdList").append(response);
+                }
+
+            })
+
+        })
+
+        $("#projectIdList").change(function () {
+            var CustomerId = $("#customerIdList").val();
+            var ProjectId = $(this).val();
+
+            if (ProjectId == "")
+                ProjectId = "0";
+            BindDataTable();
+
+        });
+    });
+
+
+
+
+
+    var BindDataTable = function (response) {
+
+        if ($.fn.DataTable.isDataTable("#myDataTable")) {
+            oTable.draw();
+        }
+        else {
+
+            oTable = $("#myDataTable").DataTable({
+                "bServerSide": true,
+                "sAjaxSource": "/Home/getSubProjects",
+                "fnServerData": function (sSource, aoData, fnCallback) {
+
+                    var ProjectId = $("#projectIdList").val();
+                    if (ProjectId == "")
+                        ProjectId = "0";
+
+                    aoData.push({ "name": "ProjectId", "value": ProjectId });
+
+                    $.ajax({
+                        data: aoData,
+                        type: "Get",
+                        url: sSource,
+                        success: fnCallback
+                    })
+
+
+                },
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Swedish.json"
+                },
+                "aoColumns": [
+                    { "mData": "subProjectName" },
+                    {
+                        "mData": "subProjectID",
+                        "bSortable": false,
+                        "render": function (subProjectID, type, full, meta) {
+                            return '<a href="#" onclick="AddEditActivity(' + subProjectID + ')"><i class="glyphicon glyphicon-pencil"></i></a>'
+
+                        }
+                    },
+                ]
+
+            });
+        }
+    }
+
+
+    var AddEditActivity = function (subProjectID) {
+
+        var ProjId = $("#projectIdList").val();
+        if (ProjId == "") {
+            $("#ErrorTextId").html("<span>Kund och projekt måste väljas först</span>");
+            return;
+        }
+        var url = "/Home/AddEditSubProj?subProjectID=" + subProjectID + "&projectID=" + ProjId;
+        $("#myModalBodyDiv1").load(url, function () {
+            $("#myModal1").modal("show");
+
+        })
+    }
+
+
+</script>
+
+

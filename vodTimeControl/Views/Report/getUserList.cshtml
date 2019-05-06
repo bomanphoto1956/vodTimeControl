@@ -1,0 +1,10 @@
+﻿<option value="">--Alla användare--</option>
+@if (ViewBag.userlist != null)
+{
+    foreach (var item in ViewBag.userlist)
+    {
+        <option value="@item.Value">@item.Text </option>
+    }
+
+}
+

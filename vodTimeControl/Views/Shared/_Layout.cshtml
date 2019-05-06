@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/DataTable/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/DataTable/jquery.dataTables.min.js"></script>
+
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+
+            <div class="navbar-header">
+
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("VodVision TimeControl 2.0", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                @if (Session["UserId"] != null)
+                {
+
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Rapporter <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu" id="myTab">
+                                <li>@Html.ActionLink("Avsluta period", "Index", "Report")</li>    
+                                <li>@Html.ActionLink("Rapportera avslutade perioder", "reportProperties", "Report")</li>      
+                                <li>@Html.ActionLink("Rapport på tidsindervall", "reportInterval", "Report")</li>      
+                            </ul>
+                        </li>
+                        <li>@Html.ActionLink("Kunder", "registerCustomer", "Home")</li>
+                        <li>@Html.ActionLink("Projekt", "registerProject", "Home")</li>
+                        <li>@Html.ActionLink("Aktivitet", "registerActivity", "Home")</li>
+                        <li>@Html.ActionLink("Mina projekt", "myProjects", "Home")</li>
+                        <li>@Html.ActionLink("Registrera tid", "Index", "TimeReg")</li>                        
+                    </ul>
+                }
+                @if (Session["UserId"] != null)
+                {
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#">Welcome : @Session["UserName"]  </a></li>
+                        <li><a href="/Home/Logout">Logout</a></li>                        
+                    </ul>
+                }
+                else
+                {
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/Home/Login">Login</a></li>  
+                        <li><a href="/Home/Registration">Registrera</a></li>                        
+                    </ul>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - vodvision europe </p>
+        </footer>
+    </div>
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

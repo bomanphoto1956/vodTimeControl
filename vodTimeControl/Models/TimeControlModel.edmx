@@ -1,0 +1,966 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="pdsTidRedLiveModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="2">
+          <Key>
+            <PropertyRef Name="subProjectID" />
+          </Key>
+          <Property Name="subProjectID" Type="int" Nullable="false" />
+          <Property Name="projectID" Type="int" Nullable="false" />
+          <Property Name="subProjectName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="custBudget">
+          <Key>
+            <PropertyRef Name="custBudgetID" />
+          </Key>
+          <Property Name="custBudgetID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="customerID" Type="int" Nullable="false" />
+          <Property Name="period" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="monthAmount" Type="money" />
+          <Property Name="monthHours" Type="int" />
+        </EntityType>
+        <EntityType Name="customer">
+          <Key>
+            <PropertyRef Name="customerID" />
+          </Key>
+          <Property Name="customerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="custTypeID" Type="int" Nullable="false" />
+          <Property Name="custName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="address1" Type="nvarchar" MaxLength="50" />
+          <Property Name="address2" Type="nvarchar" MaxLength="50" />
+          <Property Name="zipCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="email" Type="nvarchar" MaxLength="250" />
+          <Property Name="city" Type="nvarchar" MaxLength="50" />
+          <Property Name="active" Type="bit" />
+        </EntityType>
+        <EntityType Name="custType">
+          <Key>
+            <PropertyRef Name="custTypeID" />
+          </Key>
+          <Property Name="custTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="custType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="toBeInvoiced" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="project">
+          <Key>
+            <PropertyRef Name="projectID" />
+          </Key>
+          <Property Name="projectID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="customerID" Type="int" Nullable="false" />
+          <Property Name="projectName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="active" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="reportPeriod">
+          <Key>
+            <PropertyRef Name="reportPeriodId" />
+          </Key>
+          <Property Name="reportPeriodId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fromDate" Type="datetime" Nullable="false" />
+          <Property Name="toDate" Type="datetime" Nullable="false" />
+          <Property Name="regUserId" Type="int" Nullable="false" />
+          <Property Name="regDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="subProject2">
+          <Key>
+            <PropertyRef Name="subProjectID" />
+          </Key>
+          <Property Name="subProjectID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="projectID" Type="int" Nullable="false" />
+          <Property Name="subProjectName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="templSubproj">
+          <Key>
+            <PropertyRef Name="templSubprojID" />
+          </Key>
+          <Property Name="templSubprojID" Type="int" Nullable="false" />
+          <Property Name="tempSubprojName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="timeTrackHead">
+          <Key>
+            <PropertyRef Name="timeTrackHeadID" />
+          </Key>
+          <Property Name="timeTrackHeadID" Type="int" Nullable="false" />
+          <Property Name="customerID" Type="int" Nullable="false" />
+          <Property Name="tDate" Type="datetime" Nullable="false" />
+          <Property Name="winUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="userId" Type="int" />
+        </EntityType>
+        <EntityType Name="timeTrackRow">
+          <Key>
+            <PropertyRef Name="timeTrackRowID" />
+          </Key>
+          <Property Name="timeTrackRowID" Type="int" Nullable="false" />
+          <Property Name="timeTrackHeadID" Type="int" Nullable="false" />
+          <Property Name="subProjectID" Type="int" Nullable="false" />
+          <Property Name="hours" Type="decimal" Precision="12" Scale="2" Nullable="false" />
+          <Property Name="regDate" Type="datetime" Nullable="false" />
+          <Property Name="note" Type="ntext" />
+          <Property Name="reportPeriodId" Type="int" />
+        </EntityType>
+        <EntityType Name="userProject">
+          <Key>
+            <PropertyRef Name="userProjectId" />
+          </Key>
+          <Property Name="userProjectId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="projectId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="userRole">
+          <Key>
+            <PropertyRef Name="userRoleId" />
+          </Key>
+          <Property Name="userRoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userRoleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="roleLevel" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="userTbl">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="250" Nullable="false" />
+          <Property Name="regDate" Type="datetime" Nullable="false" />
+          <Property Name="updateDate" Type="datetime" />
+          <Property Name="userRoleId" Type="int" />
+          <Property Name="password" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_custBudget_customer">
+          <End Role="customer" Type="Self.customer" Multiplicity="1" />
+          <End Role="custBudget" Type="Self.custBudget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="customerID" />
+            </Principal>
+            <Dependent Role="custBudget">
+              <PropertyRef Name="customerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_customer_custType">
+          <End Role="custType" Type="Self.custType" Multiplicity="1" />
+          <End Role="customer" Type="Self.customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="custType">
+              <PropertyRef Name="custTypeID" />
+            </Principal>
+            <Dependent Role="customer">
+              <PropertyRef Name="custTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_project_customer">
+          <End Role="customer" Type="Self.customer" Multiplicity="1" />
+          <End Role="project" Type="Self.project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="customerID" />
+            </Principal>
+            <Dependent Role="project">
+              <PropertyRef Name="customerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_reportPeriod_userTbl">
+          <End Role="userTbl" Type="Self.userTbl" Multiplicity="1" />
+          <End Role="reportPeriod" Type="Self.reportPeriod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userTbl">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="reportPeriod">
+              <PropertyRef Name="regUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_subProject_project">
+          <End Role="project" Type="Self.project" Multiplicity="1" />
+          <End Role="2" Type="Self.2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="projectID" />
+            </Principal>
+            <Dependent Role="2">
+              <PropertyRef Name="projectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_subProject2_project">
+          <End Role="project" Type="Self.project" Multiplicity="1" />
+          <End Role="subProject2" Type="Self.subProject2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="projectID" />
+            </Principal>
+            <Dependent Role="subProject2">
+              <PropertyRef Name="projectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_timeTrackHead_customer">
+          <End Role="customer" Type="Self.customer" Multiplicity="1" />
+          <End Role="timeTrackHead" Type="Self.timeTrackHead" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="customerID" />
+            </Principal>
+            <Dependent Role="timeTrackHead">
+              <PropertyRef Name="customerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_timeTrackHead_timeTrackHead">
+          <End Role="timeTrackHead" Type="Self.timeTrackHead" Multiplicity="1" />
+          <End Role="timeTrackHead1" Type="Self.timeTrackHead" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="timeTrackHead">
+              <PropertyRef Name="timeTrackHeadID" />
+            </Principal>
+            <Dependent Role="timeTrackHead1">
+              <PropertyRef Name="timeTrackHeadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_timeTrackHead_userTbl">
+          <End Role="userTbl" Type="Self.userTbl" Multiplicity="0..1" />
+          <End Role="timeTrackHead" Type="Self.timeTrackHead" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userTbl">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="timeTrackHead">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_timeTrackRow_reportPeriod">
+          <End Role="reportPeriod" Type="Self.reportPeriod" Multiplicity="0..1" />
+          <End Role="timeTrackRow" Type="Self.timeTrackRow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reportPeriod">
+              <PropertyRef Name="reportPeriodId" />
+            </Principal>
+            <Dependent Role="timeTrackRow">
+              <PropertyRef Name="reportPeriodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_timeTrackRow_subProject2">
+          <End Role="subProject2" Type="Self.subProject2" Multiplicity="1" />
+          <End Role="timeTrackRow" Type="Self.timeTrackRow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="subProject2">
+              <PropertyRef Name="subProjectID" />
+            </Principal>
+            <Dependent Role="timeTrackRow">
+              <PropertyRef Name="subProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_timeTrackRow_timeTrackHead">
+          <End Role="timeTrackHead" Type="Self.timeTrackHead" Multiplicity="1" />
+          <End Role="timeTrackRow" Type="Self.timeTrackRow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="timeTrackHead">
+              <PropertyRef Name="timeTrackHeadID" />
+            </Principal>
+            <Dependent Role="timeTrackRow">
+              <PropertyRef Name="timeTrackHeadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userProject1_project">
+          <End Role="project" Type="Self.project" Multiplicity="1" />
+          <End Role="userProject" Type="Self.userProject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="projectID" />
+            </Principal>
+            <Dependent Role="userProject">
+              <PropertyRef Name="projectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userProject1_userTbl">
+          <End Role="userTbl" Type="Self.userTbl" Multiplicity="1" />
+          <End Role="userProject" Type="Self.userProject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userTbl">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="userProject">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userTbl_userRole">
+          <End Role="userRole" Type="Self.userRole" Multiplicity="0..1" />
+          <End Role="userTbl" Type="Self.userTbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userRole">
+              <PropertyRef Name="userRoleId" />
+            </Principal>
+            <Dependent Role="userTbl">
+              <PropertyRef Name="userRoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="pdsTidRedLiveModelStoreContainer">
+          <EntitySet Name="2" EntityType="Self.2" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="custBudget" EntityType="Self.custBudget" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="customer" EntityType="Self.customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="custType" EntityType="Self.custType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="project" EntityType="Self.project" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="reportPeriod" EntityType="Self.reportPeriod" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="subProject2" EntityType="Self.subProject2" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="templSubproj" EntityType="Self.templSubproj" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="timeTrackHead" EntityType="Self.timeTrackHead" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="timeTrackRow" EntityType="Self.timeTrackRow" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="userProject" EntityType="Self.userProject" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="userRole" EntityType="Self.userRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="userTbl" EntityType="Self.userTbl" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_custBudget_customer" Association="Self.FK_custBudget_customer">
+            <End Role="customer" EntitySet="customer" />
+            <End Role="custBudget" EntitySet="custBudget" />
+          </AssociationSet>
+          <AssociationSet Name="FK_customer_custType" Association="Self.FK_customer_custType">
+            <End Role="custType" EntitySet="custType" />
+            <End Role="customer" EntitySet="customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_project_customer" Association="Self.FK_project_customer">
+            <End Role="customer" EntitySet="customer" />
+            <End Role="project" EntitySet="project" />
+          </AssociationSet>
+          <AssociationSet Name="FK_reportPeriod_userTbl" Association="Self.FK_reportPeriod_userTbl">
+            <End Role="userTbl" EntitySet="userTbl" />
+            <End Role="reportPeriod" EntitySet="reportPeriod" />
+          </AssociationSet>
+          <AssociationSet Name="FK_subProject_project" Association="Self.FK_subProject_project">
+            <End Role="project" EntitySet="project" />
+            <End Role="2" EntitySet="2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_subProject2_project" Association="Self.FK_subProject2_project">
+            <End Role="project" EntitySet="project" />
+            <End Role="subProject2" EntitySet="subProject2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_timeTrackHead_customer" Association="Self.FK_timeTrackHead_customer">
+            <End Role="customer" EntitySet="customer" />
+            <End Role="timeTrackHead" EntitySet="timeTrackHead" />
+          </AssociationSet>
+          <AssociationSet Name="FK_timeTrackHead_timeTrackHead" Association="Self.FK_timeTrackHead_timeTrackHead">
+            <End Role="timeTrackHead" EntitySet="timeTrackHead" />
+            <End Role="timeTrackHead1" EntitySet="timeTrackHead" />
+          </AssociationSet>
+          <AssociationSet Name="FK_timeTrackHead_userTbl" Association="Self.FK_timeTrackHead_userTbl">
+            <End Role="userTbl" EntitySet="userTbl" />
+            <End Role="timeTrackHead" EntitySet="timeTrackHead" />
+          </AssociationSet>
+          <AssociationSet Name="FK_timeTrackRow_reportPeriod" Association="Self.FK_timeTrackRow_reportPeriod">
+            <End Role="reportPeriod" EntitySet="reportPeriod" />
+            <End Role="timeTrackRow" EntitySet="timeTrackRow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_timeTrackRow_subProject2" Association="Self.FK_timeTrackRow_subProject2">
+            <End Role="subProject2" EntitySet="subProject2" />
+            <End Role="timeTrackRow" EntitySet="timeTrackRow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_timeTrackRow_timeTrackHead" Association="Self.FK_timeTrackRow_timeTrackHead">
+            <End Role="timeTrackHead" EntitySet="timeTrackHead" />
+            <End Role="timeTrackRow" EntitySet="timeTrackRow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userProject1_project" Association="Self.FK_userProject1_project">
+            <End Role="project" EntitySet="project" />
+            <End Role="userProject" EntitySet="userProject" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userProject1_userTbl" Association="Self.FK_userProject1_userTbl">
+            <End Role="userTbl" EntitySet="userTbl" />
+            <End Role="userProject" EntitySet="userProject" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userTbl_userRole" Association="Self.FK_userTbl_userRole">
+            <End Role="userRole" EntitySet="userRole" />
+            <End Role="userTbl" EntitySet="userTbl" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="pdsTidRedLiveModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="C2">
+          <Key>
+            <PropertyRef Name="subProjectID" />
+          </Key>
+          <Property Name="subProjectID" Type="Int32" Nullable="false" />
+          <Property Name="projectID" Type="Int32" Nullable="false" />
+          <Property Name="subProjectName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="project" Relationship="Self.FK_subProject_project" FromRole="C2" ToRole="project" />
+        </EntityType>
+        <EntityType Name="custBudget">
+          <Key>
+            <PropertyRef Name="custBudgetID" />
+          </Key>
+          <Property Name="custBudgetID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customerID" Type="Int32" Nullable="false" />
+          <Property Name="period" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="monthAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="monthHours" Type="Int32" />
+          <NavigationProperty Name="customer" Relationship="Self.FK_custBudget_customer" FromRole="custBudget" ToRole="customer" />
+        </EntityType>
+        <EntityType Name="customer">
+          <Key>
+            <PropertyRef Name="customerID" />
+          </Key>
+          <Property Name="customerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="custTypeID" Type="Int32" Nullable="false" />
+          <Property Name="custName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="address1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="address2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="zipCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="city" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="active" Type="Boolean" />
+          <NavigationProperty Name="custBudget" Relationship="Self.FK_custBudget_customer" FromRole="customer" ToRole="custBudget" />
+          <NavigationProperty Name="custType" Relationship="Self.FK_customer_custType" FromRole="customer" ToRole="custType" />
+          <NavigationProperty Name="project" Relationship="Self.FK_project_customer" FromRole="customer" ToRole="project" />
+          <NavigationProperty Name="timeTrackHead" Relationship="Self.FK_timeTrackHead_customer" FromRole="customer" ToRole="timeTrackHead" />
+        </EntityType>
+        <EntityType Name="custType">
+          <Key>
+            <PropertyRef Name="custTypeID" />
+          </Key>
+          <Property Name="custTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="custType1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="toBeInvoiced" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="customer" Relationship="Self.FK_customer_custType" FromRole="custType" ToRole="customer" />
+        </EntityType>
+        <EntityType Name="project">
+          <Key>
+            <PropertyRef Name="projectID" />
+          </Key>
+          <Property Name="projectID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="customerID" Type="Int32" Nullable="false" />
+          <Property Name="projectName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="active" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="C2" Relationship="Self.FK_subProject_project" FromRole="project" ToRole="C2" />
+          <NavigationProperty Name="customer" Relationship="Self.FK_project_customer" FromRole="project" ToRole="customer" />
+          <NavigationProperty Name="subProject2" Relationship="Self.FK_subProject2_project" FromRole="project" ToRole="subProject2" />
+          <NavigationProperty Name="userProject" Relationship="Self.FK_userProject1_project" FromRole="project" ToRole="userProject" />
+        </EntityType>
+        <EntityType Name="subProject2">
+          <Key>
+            <PropertyRef Name="subProjectID" />
+          </Key>
+          <Property Name="subProjectID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="projectID" Type="Int32" Nullable="false" />
+          <Property Name="subProjectName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="project" Relationship="Self.FK_subProject2_project" FromRole="subProject2" ToRole="project" />
+          <NavigationProperty Name="timeTrackRow" Relationship="pdsTidRedLiveModel.FK_timeTrackRow_subProject2" FromRole="subProject2" ToRole="timeTrackRow" />
+        </EntityType>
+        <EntityType Name="templSubproj">
+          <Key>
+            <PropertyRef Name="templSubprojID" />
+          </Key>
+          <Property Name="templSubprojID" Type="Int32" Nullable="false" />
+          <Property Name="tempSubprojName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="timeTrackHead">
+          <Key>
+            <PropertyRef Name="timeTrackHeadID" />
+          </Key>
+          <Property Name="timeTrackHeadID" Type="Int32" Nullable="false" />
+          <Property Name="customerID" Type="Int32" Nullable="false" />
+          <Property Name="tDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="winUserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="customer" Relationship="Self.FK_timeTrackHead_customer" FromRole="timeTrackHead" ToRole="customer" />
+          <Property Name="userId" Type="Int32" />
+          <NavigationProperty Name="timeTrackHead1" Relationship="pdsTidRedLiveModel.FK_timeTrackHead_timeTrackHead" FromRole="timeTrackHead" ToRole="timeTrackHead1" />
+          <NavigationProperty Name="timeTrackHead2" Relationship="pdsTidRedLiveModel.FK_timeTrackHead_timeTrackHead" FromRole="timeTrackHead1" ToRole="timeTrackHead" />
+          <NavigationProperty Name="userTbl" Relationship="pdsTidRedLiveModel.FK_timeTrackHead_userTbl" FromRole="timeTrackHead" ToRole="userTbl" />
+          <NavigationProperty Name="timeTrackRow" Relationship="pdsTidRedLiveModel.FK_timeTrackRow_timeTrackHead" FromRole="timeTrackHead" ToRole="timeTrackRow" />
+        </EntityType>
+        <EntityType Name="userProject">
+          <Key>
+            <PropertyRef Name="userProjectId" />
+          </Key>
+          <Property Name="userProjectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="projectId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="project" Relationship="Self.FK_userProject1_project" FromRole="userProject" ToRole="project" />
+          <NavigationProperty Name="userTbl" Relationship="Self.FK_userProject1_userTbl" FromRole="userProject" ToRole="userTbl" />
+        </EntityType>
+        <EntityType Name="userRole">
+          <Key>
+            <PropertyRef Name="userRoleId" />
+          </Key>
+          <Property Name="userRoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userRoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="roleLevel" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="userTbl" Relationship="Self.FK_userTbl_userRole" FromRole="userRole" ToRole="userTbl" />
+        </EntityType>
+        <EntityType Name="userTbl">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="250" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="regDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="updateDate" Type="DateTime" Precision="3" />
+          <Property Name="userRoleId" Type="Int32" />
+          <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="userProject" Relationship="Self.FK_userProject1_userTbl" FromRole="userTbl" ToRole="userProject" />
+          <NavigationProperty Name="userRole" Relationship="Self.FK_userTbl_userRole" FromRole="userTbl" ToRole="userRole" />
+          <NavigationProperty Name="timeTrackHead" Relationship="pdsTidRedLiveModel.FK_timeTrackHead_userTbl" FromRole="userTbl" ToRole="timeTrackHead" />
+          <NavigationProperty Name="reportPeriod" Relationship="pdsTidRedLiveModel.FK_reportPeriod_userTbl" FromRole="userTbl" ToRole="reportPeriod" />
+        </EntityType>
+        <Association Name="FK_subProject_project">
+          <End Role="project" Type="Self.project" Multiplicity="1" />
+          <End Role="C2" Type="Self.C2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="projectID" />
+            </Principal>
+            <Dependent Role="C2">
+              <PropertyRef Name="projectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_custBudget_customer">
+          <End Role="customer" Type="Self.customer" Multiplicity="1" />
+          <End Role="custBudget" Type="Self.custBudget" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="customerID" />
+            </Principal>
+            <Dependent Role="custBudget">
+              <PropertyRef Name="customerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_customer_custType">
+          <End Role="custType" Type="Self.custType" Multiplicity="1" />
+          <End Role="customer" Type="Self.customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="custType">
+              <PropertyRef Name="custTypeID" />
+            </Principal>
+            <Dependent Role="customer">
+              <PropertyRef Name="custTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_project_customer">
+          <End Role="customer" Type="Self.customer" Multiplicity="1" />
+          <End Role="project" Type="Self.project" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="customerID" />
+            </Principal>
+            <Dependent Role="project">
+              <PropertyRef Name="customerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_timeTrackHead_customer">
+          <End Role="customer" Type="Self.customer" Multiplicity="1" />
+          <End Role="timeTrackHead" Type="Self.timeTrackHead" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="customer">
+              <PropertyRef Name="customerID" />
+            </Principal>
+            <Dependent Role="timeTrackHead">
+              <PropertyRef Name="customerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_subProject2_project">
+          <End Role="project" Type="Self.project" Multiplicity="1" />
+          <End Role="subProject2" Type="Self.subProject2" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="projectID" />
+            </Principal>
+            <Dependent Role="subProject2">
+              <PropertyRef Name="projectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userProject1_project">
+          <End Role="project" Type="Self.project" Multiplicity="1" />
+          <End Role="userProject" Type="Self.userProject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="projectID" />
+            </Principal>
+            <Dependent Role="userProject">
+              <PropertyRef Name="projectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userProject1_userTbl">
+          <End Role="userTbl" Type="Self.userTbl" Multiplicity="1" />
+          <End Role="userProject" Type="Self.userProject" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userTbl">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="userProject">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_userTbl_userRole">
+          <End Role="userRole" Type="Self.userRole" Multiplicity="0..1" />
+          <End Role="userTbl" Type="Self.userTbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userRole">
+              <PropertyRef Name="userRoleId" />
+            </Principal>
+            <Dependent Role="userTbl">
+              <PropertyRef Name="userRoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="pdsTidRedLiveEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="C2" EntityType="Self.C2" />
+          <EntitySet Name="custBudget" EntityType="Self.custBudget" />
+          <EntitySet Name="customer" EntityType="Self.customer" />
+          <EntitySet Name="custType" EntityType="Self.custType" />
+          <EntitySet Name="project" EntityType="Self.project" />
+          <EntitySet Name="subProject2" EntityType="Self.subProject2" />
+          <EntitySet Name="templSubproj" EntityType="Self.templSubproj" />
+          <EntitySet Name="timeTrackHead" EntityType="Self.timeTrackHead" />
+          <EntitySet Name="userProject" EntityType="Self.userProject" />
+          <EntitySet Name="userRole" EntityType="Self.userRole" />
+          <EntitySet Name="userTbl" EntityType="Self.userTbl" />
+          <AssociationSet Name="FK_subProject_project" Association="Self.FK_subProject_project">
+            <End Role="project" EntitySet="project" />
+            <End Role="C2" EntitySet="C2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_custBudget_customer" Association="Self.FK_custBudget_customer">
+            <End Role="customer" EntitySet="customer" />
+            <End Role="custBudget" EntitySet="custBudget" />
+          </AssociationSet>
+          <AssociationSet Name="FK_customer_custType" Association="Self.FK_customer_custType">
+            <End Role="custType" EntitySet="custType" />
+            <End Role="customer" EntitySet="customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_project_customer" Association="Self.FK_project_customer">
+            <End Role="customer" EntitySet="customer" />
+            <End Role="project" EntitySet="project" />
+          </AssociationSet>
+          <AssociationSet Name="FK_timeTrackHead_customer" Association="Self.FK_timeTrackHead_customer">
+            <End Role="customer" EntitySet="customer" />
+            <End Role="timeTrackHead" EntitySet="timeTrackHead" />
+          </AssociationSet>
+          <AssociationSet Name="FK_subProject2_project" Association="Self.FK_subProject2_project">
+            <End Role="project" EntitySet="project" />
+            <End Role="subProject2" EntitySet="subProject2" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userProject1_project" Association="Self.FK_userProject1_project">
+            <End Role="project" EntitySet="project" />
+            <End Role="userProject" EntitySet="userProject" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userProject1_userTbl" Association="Self.FK_userProject1_userTbl">
+            <End Role="userTbl" EntitySet="userTbl" />
+            <End Role="userProject" EntitySet="userProject" />
+          </AssociationSet>
+          <AssociationSet Name="FK_userTbl_userRole" Association="Self.FK_userTbl_userRole">
+            <End Role="userRole" EntitySet="userRole" />
+            <End Role="userTbl" EntitySet="userTbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_timeTrackHead_timeTrackHead" Association="pdsTidRedLiveModel.FK_timeTrackHead_timeTrackHead">
+            <End Role="timeTrackHead" EntitySet="timeTrackHead" />
+            <End Role="timeTrackHead1" EntitySet="timeTrackHead" />
+          </AssociationSet>
+          <AssociationSet Name="FK_timeTrackHead_userTbl" Association="pdsTidRedLiveModel.FK_timeTrackHead_userTbl">
+            <End Role="userTbl" EntitySet="userTbl" />
+            <End Role="timeTrackHead" EntitySet="timeTrackHead" />
+          </AssociationSet>
+          <EntitySet Name="reportPeriod" EntityType="pdsTidRedLiveModel.reportPeriod" />
+          <AssociationSet Name="FK_reportPeriod_userTbl" Association="pdsTidRedLiveModel.FK_reportPeriod_userTbl">
+            <End Role="userTbl" EntitySet="userTbl" />
+            <End Role="reportPeriod" EntitySet="reportPeriod" />
+          </AssociationSet>
+          <EntitySet Name="timeTrackRow" EntityType="pdsTidRedLiveModel.timeTrackRow" />
+          <AssociationSet Name="FK_timeTrackRow_reportPeriod" Association="pdsTidRedLiveModel.FK_timeTrackRow_reportPeriod">
+            <End Role="reportPeriod" EntitySet="reportPeriod" />
+            <End Role="timeTrackRow" EntitySet="timeTrackRow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_timeTrackRow_subProject2" Association="pdsTidRedLiveModel.FK_timeTrackRow_subProject2">
+            <End Role="subProject2" EntitySet="subProject2" />
+            <End Role="timeTrackRow" EntitySet="timeTrackRow" />
+          </AssociationSet>
+          <AssociationSet Name="FK_timeTrackRow_timeTrackHead" Association="pdsTidRedLiveModel.FK_timeTrackRow_timeTrackHead">
+            <End Role="timeTrackHead" EntitySet="timeTrackHead" />
+            <End Role="timeTrackRow" EntitySet="timeTrackRow" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="FK_timeTrackHead_timeTrackHead">
+          <End Type="pdsTidRedLiveModel.timeTrackHead" Role="timeTrackHead" Multiplicity="1" />
+          <End Type="pdsTidRedLiveModel.timeTrackHead" Role="timeTrackHead1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="timeTrackHead">
+              <PropertyRef Name="timeTrackHeadID" />
+            </Principal>
+            <Dependent Role="timeTrackHead1">
+              <PropertyRef Name="timeTrackHeadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_timeTrackHead_userTbl">
+          <End Type="pdsTidRedLiveModel.userTbl" Role="userTbl" Multiplicity="0..1" />
+          <End Type="pdsTidRedLiveModel.timeTrackHead" Role="timeTrackHead" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userTbl">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="timeTrackHead">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="reportPeriod">
+          <Key>
+            <PropertyRef Name="reportPeriodId" />
+          </Key>
+          <Property Name="reportPeriodId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fromDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="toDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="regUserId" Type="Int32" Nullable="false" />
+          <Property Name="regDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="userTbl" Relationship="pdsTidRedLiveModel.FK_reportPeriod_userTbl" FromRole="reportPeriod" ToRole="userTbl" />
+          <NavigationProperty Name="timeTrackRow" Relationship="pdsTidRedLiveModel.FK_timeTrackRow_reportPeriod" FromRole="reportPeriod" ToRole="timeTrackRow" />
+        </EntityType>
+        <Association Name="FK_reportPeriod_userTbl">
+          <End Type="pdsTidRedLiveModel.userTbl" Role="userTbl" Multiplicity="1" />
+          <End Type="pdsTidRedLiveModel.reportPeriod" Role="reportPeriod" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="userTbl">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="reportPeriod">
+              <PropertyRef Name="regUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="timeTrackRow">
+          <Key>
+            <PropertyRef Name="timeTrackRowID" />
+          </Key>
+          <Property Name="timeTrackRowID" Type="Int32" Nullable="false" />
+          <Property Name="timeTrackHeadID" Type="Int32" Nullable="false" />
+          <Property Name="subProjectID" Type="Int32" Nullable="false" />
+          <Property Name="hours" Type="Decimal" Nullable="false" Precision="12" Scale="2" />
+          <Property Name="regDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="reportPeriodId" Type="Int32" />
+          <NavigationProperty Name="reportPeriod" Relationship="pdsTidRedLiveModel.FK_timeTrackRow_reportPeriod" FromRole="timeTrackRow" ToRole="reportPeriod" />
+          <NavigationProperty Name="subProject2" Relationship="pdsTidRedLiveModel.FK_timeTrackRow_subProject2" FromRole="timeTrackRow" ToRole="subProject2" />
+          <NavigationProperty Name="timeTrackHead" Relationship="pdsTidRedLiveModel.FK_timeTrackRow_timeTrackHead" FromRole="timeTrackRow" ToRole="timeTrackHead" />
+        </EntityType>
+        <Association Name="FK_timeTrackRow_reportPeriod">
+          <End Type="pdsTidRedLiveModel.reportPeriod" Role="reportPeriod" Multiplicity="0..1" />
+          <End Type="pdsTidRedLiveModel.timeTrackRow" Role="timeTrackRow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="reportPeriod">
+              <PropertyRef Name="reportPeriodId" />
+            </Principal>
+            <Dependent Role="timeTrackRow">
+              <PropertyRef Name="reportPeriodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_timeTrackRow_subProject2">
+          <End Type="pdsTidRedLiveModel.subProject2" Role="subProject2" Multiplicity="1" />
+          <End Type="pdsTidRedLiveModel.timeTrackRow" Role="timeTrackRow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="subProject2">
+              <PropertyRef Name="subProjectID" />
+            </Principal>
+            <Dependent Role="timeTrackRow">
+              <PropertyRef Name="subProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_timeTrackRow_timeTrackHead">
+          <End Type="pdsTidRedLiveModel.timeTrackHead" Role="timeTrackHead" Multiplicity="1" />
+          <End Type="pdsTidRedLiveModel.timeTrackRow" Role="timeTrackRow" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="timeTrackHead">
+              <PropertyRef Name="timeTrackHeadID" />
+            </Principal>
+            <Dependent Role="timeTrackRow">
+              <PropertyRef Name="timeTrackHeadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="pdsTidRedLiveModelStoreContainer" CdmEntityContainer="pdsTidRedLiveEntities">
+          <EntitySetMapping Name="C2">
+            <EntityTypeMapping TypeName="pdsTidRedLiveModel.C2">
+              <MappingFragment StoreEntitySet="2">
+                <ScalarProperty Name="subProjectID" ColumnName="subProjectID" />
+                <ScalarProperty Name="projectID" ColumnName="projectID" />
+                <ScalarProperty Name="subProjectName" ColumnName="subProjectName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="custBudget">
+            <EntityTypeMapping TypeName="pdsTidRedLiveModel.custBudget">
+              <MappingFragment StoreEntitySet="custBudget">
+                <ScalarProperty Name="custBudgetID" ColumnName="custBudgetID" />
+                <ScalarProperty Name="customerID" ColumnName="customerID" />
+                <ScalarProperty Name="period" ColumnName="period" />
+                <ScalarProperty Name="monthAmount" ColumnName="monthAmount" />
+                <ScalarProperty Name="monthHours" ColumnName="monthHours" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="customer">
+            <EntityTypeMapping TypeName="pdsTidRedLiveModel.customer">
+              <MappingFragment StoreEntitySet="customer">
+                <ScalarProperty Name="customerID" ColumnName="customerID" />
+                <ScalarProperty Name="custTypeID" ColumnName="custTypeID" />
+                <ScalarProperty Name="custName" ColumnName="custName" />
+                <ScalarProperty Name="address1" ColumnName="address1" />
+                <ScalarProperty Name="address2" ColumnName="address2" />
+                <ScalarProperty Name="zipCode" ColumnName="zipCode" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="active" ColumnName="active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="custType">
+            <EntityTypeMapping TypeName="pdsTidRedLiveModel.custType">
+              <MappingFragment StoreEntitySet="custType">
+                <ScalarProperty Name="custTypeID" ColumnName="custTypeID" />
+                <ScalarProperty Name="custType1" ColumnName="custType" />
+                <ScalarProperty Name="toBeInvoiced" ColumnName="toBeInvoiced" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="project">
+            <EntityTypeMapping TypeName="pdsTidRedLiveModel.project">
+              <MappingFragment StoreEntitySet="project">
+                <ScalarProperty Name="projectID" ColumnName="projectID" />
+                <ScalarProperty Name="customerID" ColumnName="customerID" />
+                <ScalarProperty Name="projectName" ColumnName="projectName" />
+                <ScalarProperty Name="active" ColumnName="active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="subProject2">
+            <EntityTypeMapping TypeName="pdsTidRedLiveModel.subProject2">
+              <MappingFragment StoreEntitySet="subProject2">
+                <ScalarProperty Name="subProjectID" ColumnName="subProjectID" />
+                <ScalarProperty Name="projectID" ColumnName="projectID" />
+                <ScalarProperty Name="subProjectName" ColumnName="subProjectName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="templSubproj">
+            <EntityTypeMapping TypeName="pdsTidRedLiveModel.templSubproj">
+              <MappingFragment StoreEntitySet="templSubproj">
+                <ScalarProperty Name="templSubprojID" ColumnName="templSubprojID" />
+                <ScalarProperty Name="tempSubprojName" ColumnName="tempSubprojName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="timeTrackHead">
+            <EntityTypeMapping TypeName="pdsTidRedLiveModel.timeTrackHead">
+              <MappingFragment StoreEntitySet="timeTrackHead">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="timeTrackHeadID" ColumnName="timeTrackHeadID" />
+                <ScalarProperty Name="customerID" ColumnName="customerID" />
+                <ScalarProperty Name="tDate" ColumnName="tDate" />
+                <ScalarProperty Name="winUserID" ColumnName="winUserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="userProject">
+            <EntityTypeMapping TypeName="pdsTidRedLiveModel.userProject">
+              <MappingFragment StoreEntitySet="userProject">
+                <ScalarProperty Name="userProjectId" ColumnName="userProjectId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="projectId" ColumnName="projectId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="userRole">
+            <EntityTypeMapping TypeName="pdsTidRedLiveModel.userRole">
+              <MappingFragment StoreEntitySet="userRole">
+                <ScalarProperty Name="userRoleId" ColumnName="userRoleId" />
+                <ScalarProperty Name="userRoleName" ColumnName="userRoleName" />
+                <ScalarProperty Name="roleLevel" ColumnName="roleLevel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="userTbl">
+            <EntityTypeMapping TypeName="pdsTidRedLiveModel.userTbl">
+              <MappingFragment StoreEntitySet="userTbl">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="regDate" ColumnName="regDate" />
+                <ScalarProperty Name="updateDate" ColumnName="updateDate" />
+                <ScalarProperty Name="userRoleId" ColumnName="userRoleId" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reportPeriod">
+            <EntityTypeMapping TypeName="pdsTidRedLiveModel.reportPeriod">
+              <MappingFragment StoreEntitySet="reportPeriod">
+                <ScalarProperty Name="regDate" ColumnName="regDate" />
+                <ScalarProperty Name="regUserId" ColumnName="regUserId" />
+                <ScalarProperty Name="toDate" ColumnName="toDate" />
+                <ScalarProperty Name="fromDate" ColumnName="fromDate" />
+                <ScalarProperty Name="reportPeriodId" ColumnName="reportPeriodId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="timeTrackRow">
+            <EntityTypeMapping TypeName="pdsTidRedLiveModel.timeTrackRow">
+              <MappingFragment StoreEntitySet="timeTrackRow">
+                <ScalarProperty Name="reportPeriodId" ColumnName="reportPeriodId" />
+                <ScalarProperty Name="note" ColumnName="note" />
+                <ScalarProperty Name="regDate" ColumnName="regDate" />
+                <ScalarProperty Name="hours" ColumnName="hours" />
+                <ScalarProperty Name="subProjectID" ColumnName="subProjectID" />
+                <ScalarProperty Name="timeTrackHeadID" ColumnName="timeTrackHeadID" />
+                <ScalarProperty Name="timeTrackRowID" ColumnName="timeTrackRowID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
